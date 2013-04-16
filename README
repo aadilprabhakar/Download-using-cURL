@@ -1,0 +1,12 @@
+README
+
+Download from another server directly to your working folder using PHP cURL
+
+Uses cURL call php function to update status of download on the fly.
+
+Resources referred to
+- http://www.php.net/manual/en/book.curl.php
+- PHP File functions
+- GOOOGLE -> Loads and loads of googling..
+
+Update : 16 APRIL 2013 => Added jQuery progress bar
