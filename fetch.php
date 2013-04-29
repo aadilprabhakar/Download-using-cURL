@@ -11,8 +11,8 @@
 			background-color: #ccc;
 		}    
 	</style>
-  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+  	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 </head>
 <body>
 
@@ -26,11 +26,11 @@
     </tr>
     <tr>
         <th>Package URL</th>
-        <td><input type="text" name="source" placeholder="Source Package URL" />
+        <td><input type="text" name="source" placeholder="Source Package URL" <?php if(isset($_POST['source'])): ?> value="<?php echo $_POST['source']; ?>" <?php endif; ?>/>
     </tr>
     <tr>
         <th>Package Name</th>
-        <td><input type="text" name="rename" placeholder="Package Name" /></td>
+        <td><input type="text" name="rename" placeholder="Package Name" <?php if(isset($_POST['rename'])): ?> value="<?php echo $_POST['rename']; ?>" <?php endif; ?> /></td>
     </tr>
     
 	<tr>
@@ -77,7 +77,7 @@ function callback($download_size, $downloaded, $upload_size, $uploaded){
 	$download_size	= round(($download_size / 1048576), 2);
 	$downloaded		= round(($downloaded / 1048576) , 2);
 	$remaining 		= round($download_size - $downloaded , 2);
-	
+
 	$progress		= (($downloaded / $download_size) * 100);
  ?>
 	<script type='text/javascript'>
@@ -99,7 +99,7 @@ if( isset($_POST['process']) && $_POST['process'] == 'TRUE' ):
 
 	$destination = "./" . $filename;
 	$file = fopen($destination, "w+");
-	
+
 	$ch = curl_init();
 	@curl_setopt($ch, CURLOPT_URL, $source);
 	@curl_setopt($ch, CURLOPT_NOPROGRESS, false);
