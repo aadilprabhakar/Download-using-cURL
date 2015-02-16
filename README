@@ -1,12 +1,12 @@
-README
+##README
 
-Download from another server directly to your working folder using PHP cURL
+Download using cURL using URL. Uses PHP cURL to download the file/archive from another server / URL.
+We have been using this to download directly from another server instead of download and uploading in mutliple steps.
 
-Uses cURL call php function to update status of download on the fly.
-
-Resources referred to
+##Resources
 - PHP.net cURL
 - PHP.net File functions
-- GOOGLE -> Loads and loads of googling..
 
-Update : 16 APRIL 2013 => Added jQuery progress bar
+##Changelog
+16 FEB 2015 : Found to be not working!
+16 APR 2013 : Added jQuery progress bar
