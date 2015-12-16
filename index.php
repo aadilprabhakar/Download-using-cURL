@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Server to Server</title>
+	<title>cURL Transfer</title>
     <style type="text/css">
 		body	{font-family: "Times New Roman", Times, serif}
 		.align-center	{text-align:center; }
@@ -42,7 +42,23 @@
 </form>
 
 <?php
-function callback($curl, $download_size, $downloaded, $upload_size, $uploaded){
+function callback($curl, $download_size, $downloaded, $upload_size, $uploaded = null){
+	
+	$curlversion	=	curl_version ( CURLVERSION_NOW );
+	$curlversion	=	$curlversion['version'];
+	
+	if(version_compare('7.32.00', $curlversion) > 0 ):
+		//cURL VERSION IS OLDER
+		//curl_progress_callback($resource,$dltotal, $dlnow, $ultotal, $ulnow);
+	else:
+		//cURL VERSION IS EQUAL OR GREATER THAN 7.32.00
+		//curl_progress_callback($dltotal, $dlnow, $ultotal, $ulnow);
+		$uploaded 		= $upload_size;
+		$upload_size 	= $downloaded;
+		$downloaded 	= $download_size;
+		$download_size 	= $curl;
+	endif;	
+	
 	global $time_start;
 	$time_current 	= time();
 	$time_taken		= $time_current - $time_start;
@@ -60,6 +76,7 @@ function callback($curl, $download_size, $downloaded, $upload_size, $uploaded){
     }
  ?>
 	<script type='text/javascript'>
+		document.title = "<?php echo $progress ?>% - cURL Transfer";
         document.getElementById("progressbar").setAttribute('value', '<?=$progress;?>');
 		document.getElementById("rate").innerHTML 		= '<?php echo $speed; ?>' + ' Mbps';
 		document.getElementById("duration").innerHTML 	= '<?php echo $time_taken; ?> seconds' ;				
@@ -80,17 +97,19 @@ if( isset($_POST['process']) && $_POST['process'] == 'TRUE' ):
     
     $file       = fopen( './tmp/'.$filename.'.renamed', "w+" );
     
+ 
+
     $ch = curl_init();
     @curl_setopt($ch,   CURLOPT_URL,    $source);
     @curl_setopt($ch,   CURLOPT_FILE,   $file);
     @curl_setopt($ch,   CURLOPT_NOPROGRESS, FALSE);
     @curl_setopt($ch,   CURLOPT_PROGRESSFUNCTION,   'callback');
-    @curl_setopt($ch,   CURLOPT_BUFFERSIZE, 524288);
+    @curl_setopt($ch,   CURLOPT_BUFFERSIZE, 100000);
     @curl_setopt($ch,   CURLOPT_FILE,       $file);
 
     $buffer = curl_exec ($ch);
     curl_close( $ch );
-    
+
 endif; 
 ?>
 </body>
