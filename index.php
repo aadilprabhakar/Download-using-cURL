@@ -8,6 +8,8 @@
 		input[type=text],
 		input[type=submit]	{width:100%;}
 		.inline{ display:inline-block }
+		.label { font-size: 100% !important; }
+		.border-all { border: 1px solid #efefef; border-radius:10px; }
 	</style>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -17,40 +19,49 @@
 </head>
 <body>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-<input type="hidden" name="process" value="TRUE" />
-	<table style="margin:0 auto; text-align:left; width: 800px;">
-    <tr>
-        <th colspan="2" class="align-center">
-            <input type="submit" value="Sync Now" />
-        </th>
-    </tr>
-    <tr>
-        <th>Package URL</th>
-        <td><input type="text" name="source" placeholder="Source Package URL" <?php if(isset($_POST['source'])): ?> value="<?php echo $_POST['source']; ?>" <?php endif; ?>/>
-        <td></td>
-    </tr>
-    <tr>
-        <th colspan='100%'>
-            <!-- <progress id="progressbar" value="1" max="100"></progress> -->
-            
+<header class="container">
+<div class="row">
+<div class="col-xs-12 text-center">
+	<h1>Download large files</h1>
+</div></div>
+</header>
+
+<div class="container">
+<div class="row">
+  <fieldset>
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+  <div class="row border-all">
+  <div class="col-xs-12">
+  	<label class="label label-info">Package URL</label><br>
+  	<input type="text" name="source" placeholder="Source Package URL" <?php if(isset($_POST['source'])): ?> value="<?php echo $_POST['source']; ?>" <?php endif; ?> class="form-control input-lg" />
+  </div>
+  <div class="col-xs-12">
+	<input type="hidden" name="process" value="TRUE" />  
+	<input type="submit" value="Sync Now" class="btn btn-success btn-block" />
+  </div>
+  </div>
+</form>
+  </fieldset>
+</div><!-- .row -->
+</div><!-- .container -->
+
+<footer class="container-fluid" style="position:fixed; bottom:0; width:100%">
+<div class="row border-all">
+  <div class="col-xs-12">
+            <small><label class="label label-info">Time Elapsed : <div id="duration" class="inline">&nbsp;</div></label>
+                &nbsp;
+            <label class="label label-success">Speed : <div id="rate" class="inline">&nbsp;</div></small> </label> 
+  </div>            
+  <div class="col-xs-12">
 			<div class="progress">
 			  <div id="progressbar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width:2;">
 			    0%
 			  </div>
-			</div>            
-             
-        </th>
-    </tr>
-    <tr>
-        <td colspan="100%" class="align-center">
-            <small><strong>Time Elapsed : </strong><div id="duration" class="inline">&nbsp;</div>
-                &nbsp;
-            <strong>Speed : </strong><div id="rate" class="inline">&nbsp;</div></small>
-        </td>
-    </tr>
-</table>
-</form>
+			</div>              
+  </div>
+</div><!-- .row -->
+</footer>
+
 <?php
 //error_reporting("E_ALL"); ini_set('display_errors','1');
 
