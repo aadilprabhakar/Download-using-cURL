@@ -51,20 +51,23 @@
     </tr>
 </table>
 </form>
-
 <?php
+//error_reporting("E_ALL"); ini_set('display_errors','1');
+
+$curlversion	=	curl_version ( CURLVERSION_NOW );
+$curlversion	=	$curlversion['version'];
+
+
 function callback($curl, $download_size, $downloaded, $upload_size, $uploaded = null){
+	//print "CURL VERSION is $curl_version <br>";
 	
-	$curlversion	=	curl_version ( CURLVERSION_NOW );
-	$curlversion	=	$curlversion['version'];
-	
-	if(version_compare('7.32.00', $curlversion) > 0 ):
+	if(version_compare('7.32.00', $curlversion) >= 0 ): //CURLOPT_XFERINFOFUNCTION
 		//cURL VERSION IS OLDER
 		//curl_progress_callback($resource,$dltotal, $dlnow, $ultotal, $ulnow);
 	else:
 		//cURL VERSION IS EQUAL OR GREATER THAN 7.32.00
 		//curl_progress_callback($dltotal, $dlnow, $ultotal, $ulnow);
-		$uploaded 		= $upload_size;
+		$uploaded 	= $upload_size;
 		$upload_size 	= $downloaded;
 		$downloaded 	= $download_size;
 		$download_size 	= $curl;
@@ -85,12 +88,14 @@ function callback($curl, $download_size, $downloaded, $upload_size, $uploaded = 
     else {
         $progress   = 0;
     }
+    
+    $progress = round($progress);
  ?>
 	<script type='text/javascript'>
-		console.log('<?=$progress?>');
+		//console.log('<?=$progress?>');
 		document.title = "<?php echo $progress ?>% - cURL Transfer";
-		document.getElementById("progressbar").style.width = '<?=$progress?>px';
-		document.getElementById("progressbar").innerHTML = '<?=$progress?>';
+		document.getElementById("progressbar").style.width = '<?=$progress?>%';
+		document.getElementById("progressbar").innerHTML = '<?=$progress?>%';
 		document.getElementById("rate").innerHTML 		= '<?php echo $speed; ?>' + ' Mbps';
 		document.getElementById("duration").innerHTML 	= '<?php echo $time_taken; ?> seconds' ;				
 	</script>
@@ -114,7 +119,12 @@ if( isset($_POST['process']) && $_POST['process'] == 'TRUE' ):
     @curl_setopt($ch,   CURLOPT_URL,    $source);
     @curl_setopt($ch,   CURLOPT_FILE,   $file);
     @curl_setopt($ch,   CURLOPT_NOPROGRESS, FALSE);
-    @curl_setopt($ch,   CURLOPT_PROGRESSFUNCTION,   'callback');
+    
+    if(version_compare('7.32.00', $curlversion) >= 0 ): //CURLOPT_XFERINFOFUNCTION
+	@curl_setopt($ch,   CURLOPT_XFERINFOFUNCTION,   'callback');    		
+    else:
+        @curl_setopt($ch,   CURLOPT_PROGRESSFUNCTION,   'callback');
+    endif;
     @curl_setopt($ch,   CURLOPT_BUFFERSIZE, 100000);
     @curl_setopt($ch,   CURLOPT_FILE,       $file);
 
