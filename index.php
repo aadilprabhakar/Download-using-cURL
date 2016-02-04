@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>cURL Transfer</title>
+	<title>Server to Server</title>
     <style type="text/css">
 		body	{font-family: "Times New Roman", Times, serif}
 		.align-center	{text-align:center; }
 		input[type=text],
 		input[type=submit]	{width:100%;}
-		#progressbar{ width:100% }
 		.inline{ display:inline-block }
 	</style>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -28,7 +32,14 @@
     </tr>
     <tr>
         <th colspan='100%'>
-            <progress id="progressbar" value="1" max="100"></progress> 
+            <!-- <progress id="progressbar" value="1" max="100"></progress> -->
+            
+			<div class="progress">
+			  <div id="progressbar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width:2;">
+			    0%
+			  </div>
+			</div>            
+             
         </th>
     </tr>
     <tr>
@@ -76,8 +87,10 @@ function callback($curl, $download_size, $downloaded, $upload_size, $uploaded = 
     }
  ?>
 	<script type='text/javascript'>
+		console.log('<?=$progress?>');
 		document.title = "<?php echo $progress ?>% - cURL Transfer";
-        document.getElementById("progressbar").setAttribute('value', '<?=$progress;?>');
+		document.getElementById("progressbar").style.width = '<?=$progress?>px';
+		document.getElementById("progressbar").innerHTML = '<?=$progress?>';
 		document.getElementById("rate").innerHTML 		= '<?php echo $speed; ?>' + ' Mbps';
 		document.getElementById("duration").innerHTML 	= '<?php echo $time_taken; ?> seconds' ;				
 	</script>
@@ -97,8 +110,6 @@ if( isset($_POST['process']) && $_POST['process'] == 'TRUE' ):
     
     $file       = fopen( './tmp/'.$filename.'.renamed', "w+" );
     
- 
-
     $ch = curl_init();
     @curl_setopt($ch,   CURLOPT_URL,    $source);
     @curl_setopt($ch,   CURLOPT_FILE,   $file);
