@@ -70,6 +70,7 @@ $curlversion	=	$curlversion['version'];
 
 
 function callback($curl, $download_size, $downloaded, $upload_size, $uploaded = null){
+	global $curlversion;
 	//print "CURL VERSION is $curl_version <br>";
 	
 	if(version_compare('7.32.00', $curlversion) >= 0 ): //CURLOPT_XFERINFOFUNCTION
